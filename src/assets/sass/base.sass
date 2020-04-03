@@ -14,3 +14,14 @@ $border-radius: 9px
   overflow: hidden
   padding: $horizontal $vertical
   border-radius: $border-radius
+
+@mixin button($bg-color: $theme-color, $font-color: white, $border: 0)
+  background-color: $bg-color
+  padding: 7px 15px
+  font-size: 12px
+  color: $font-color
+  cursor: pointer
+  outline: none
+  border: $border solid #DCDFE6
+  border-radius: 3px
+  box-sizing: border-box
