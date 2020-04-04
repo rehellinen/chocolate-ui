@@ -12,7 +12,11 @@
           .cover-selector__last(@click="toLast")
           .cover-selector__thumbnails
             .cover-selector__selected(:style="selectedStyle")
-            img.cover-selector__thumbnail(v-for="img in images" :src="img")
+            img.cover-selector__thumbnail(
+              @click="selectImg(i)"
+              v-for="(img, i) in images"
+              :src="img"
+            )
           .cover-selector__next(@click="toNext")
 </template>
 
@@ -46,6 +50,9 @@ export default {
     }
   },
   methods: {
+    selectImg (i) {
+      this.activeIndex = i
+    },
     openDialog () {
       this.visible = true
     },
@@ -101,11 +108,13 @@ export default {
         border: 2px solid white
         position: absolute
         margin-top: -2px
+        transition: all 0.5s ease-in-out
         cursor: pointer
       .cover-selector__thumbnails
         .cover-selector__thumbnail
           width: 40px
           height: 60px
           vertical-align: bottom
+          cursor: pointer
   .de
 </style>
