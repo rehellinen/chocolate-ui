@@ -1,6 +1,6 @@
 <template lang="pug">
-  ul.menu
-    li.menu-item(v-for="menu in menus")
+  ul.menu__wrapper
+    li.menu__link(v-for="menu in menus")
       router-link(tag="span" :to="menu.path") {{menu.name}}
 </template>
 
@@ -9,10 +9,10 @@ export default {
   data () {
     return {
       menus: [{
-        name: '封面选择组件',
+        name: '封面选择',
         path: '/cover_selection'
       }, {
-        name: '无限加载组件',
+        name: '无限加载',
         path: '/roll_to_load'
       }]
     }
@@ -23,13 +23,13 @@ export default {
 <style lang="sass" scoped>
   @import "~sass/base"
 
-  .menu
+  .menu__wrapper
     display: flex
     justify-content: space-around
     background-color: $theme-color
     height: 50px
     align-items: center
-    .menu-item
+    .menu__link
       font-size: 15px
       color: white
       cursor: pointer
