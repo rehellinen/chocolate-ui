@@ -18,6 +18,7 @@
             .cover-selector__selected(
               @mousedown="begin"
               :style="selectedStyle"
+              :class="{ transition }"
             )
             img.cover-selector__thumbnail(
               @click="selectImg(i)"
@@ -50,6 +51,7 @@ export default {
     return {
       activeIndex: this.defaultActiveIndex, // 已选择的图片Index
       visible: true, // 是否显示dialog
+      transition: true, // 是否开启选择框的动画
       offsetLeft: -2, // 选择框距离最左侧图片的距离
       moveDistance: 0 // 鼠标拖动选择框的距离
     }
@@ -89,6 +91,7 @@ export default {
     },
     // 以下为实现可拖拽选择框的四个事件处理函数
     begin (e) {
+      this.transition = false
       this.initialDistance = e.clientX
     },
     move (e) {
@@ -109,6 +112,7 @@ export default {
     },
     stop (e) {
       if (this.initialDistance) {
+        this.transition = true
         const allLeft = this.offsetLeft + this.moveDistance
         this.activeIndex = Math.round(allLeft / thumbnailWidth)
         this.initialDistance = 0
@@ -151,6 +155,8 @@ export default {
         position: absolute
         margin-top: -2px
         cursor: pointer
+        &.transition
+          transition: margin-left 0.4s ease-in-out
       .cover-selector__thumbnails
         .cover-selector__thumbnail
           width: 40px
