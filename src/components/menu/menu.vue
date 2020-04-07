@@ -13,7 +13,7 @@ export default {
         path: '/cover_selection'
       }, {
         name: '无限加载',
-        path: '/roll_to_load'
+        path: '/load_more'
       }]
     }
   }
