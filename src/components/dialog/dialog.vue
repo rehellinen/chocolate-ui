@@ -1,16 +1,17 @@
 <template lang="pug">
-  div(v-if="visible")
-    .shadow
-    .dialog__wrapper
-      .dialog(:style="`width: ${width}`")
-        .dialog__header
-          span.dialog__title {{title}}
-        .dialog__body
-          slot
-            span {{content}}
-        .dialog__footer(v-if="showFooter")
-          button.dialog__confirm(@click="toConfirm") 确定
-          button.dialog__cancel(@click="toCancel") 取消
+  transition(name="dialog")
+    div(v-if="visible")
+      .dialog__shadow
+      .dialog__wrapper
+        .dialog(:style="`width: ${width}`")
+          .dialog__header
+            span.dialog__title {{title}}
+          .dialog__body
+            slot
+              span {{content}}
+          .dialog__footer(v-if="showFooter")
+            button.dialog__confirm(@click="toConfirm") 确定
+            button.dialog__cancel(@click="toCancel") 取消
 </template>
 
 <script>
@@ -54,7 +55,12 @@ export default {
 
   $horizontal: 20px
 
-  .shadow
+  .dialog-enter-active, .dialog-leave-active
+    transition: opacity .2s ease-in-out
+  .dialog-enter, .dialog-leave-to
+    opacity: 0
+
+  .dialog__shadow
     z-index: 1000
     position: fixed
     top: 0
