@@ -28,7 +28,7 @@
               img.cover-selector__thumbnail(
                 @dragstart.prevent="noop"
                 @selectstart.prevent="noop"
-                @load="initDistance"
+                @load="init"
                 @mousedown="selectImg(i, 'down')"
                 @mouseup="selectImg(i, 'up')"
                 @mouseleave="selectImg(i, 'leave')"
@@ -42,6 +42,7 @@
 import ChocDialog from '../dialog/dialog'
 
 let completedCount = 0 // 完成加载的图片数量
+let maxRightDistance = 0 // 选择框最多能向右滑动的距离
 const distances = [] // 缓存每张图片到最左侧的距离以增加性能
 const selectedTotalWidth = 430 // 选择框总长度为430px
 const selectedBorder = 2 // 选择框的border宽度
@@ -80,27 +81,50 @@ export default {
     }
   },
   watch: {
-    activeIndex (newIndex) {
-      this.computeSelected(newIndex)
+    activeIndex (newIndex, oldIndex) {
+      this.computeSelected(newIndex, oldIndex)
     }
   },
   methods: {
-    computeSelected (newIndex) {
+    computeSelected (newIndex, oldIndex) {
       this.selectedWidth = distances[newIndex].width
       const originOffsetLeft = distances[newIndex].offset
-
-      if (originOffsetLeft + this.selectedWidth > selectedTotalWidth) {
-        this.selectedOffset = selectedTotalWidth - this.selectedWidth
-        this.imagesOffset = originOffsetLeft - this.selectedOffset
-      } if (originOffsetLeft - this.imagesOffset <= 0) {
+      const originWidth = distances[newIndex].width
+      if (originOffsetLeft - this.imagesOffset + this.selectedWidth > selectedTotalWidth) {
+        // 选择框超出右边缘的情况
+        if (oldIndex == null) {
+          // 处理用户滑动却没有变化Index的情况
+          if (this.moveDistance) {
+            this.selectedOffset = selectedTotalWidth - this.selectedWidth
+            this.imagesOffset = originOffsetLeft - this.selectedOffset
+          }
+        } else {
+          if (newIndex < oldIndex) {
+            console.log('11')
+            if (originOffsetLeft + originWidth > selectedTotalWidth) {
+              this.selectedOffset = selectedTotalWidth - originWidth
+              this.imagesOffset = originOffsetLeft + originWidth - selectedTotalWidth
+            } else {
+              this.selectedOffset = originOffsetLeft - this.imagesOffset
+            }
+          } else {
+            console.log('12')
+            this.selectedOffset = selectedTotalWidth - this.selectedWidth
+            this.imagesOffset = originOffsetLeft - this.selectedOffset
+          }
+        }
+      } else if (originOffsetLeft - this.imagesOffset <= 0) {
+        // 选择框超出左边缘的情况
         this.selectedOffset = 0
         this.imagesOffset = originOffsetLeft
       } else {
         this.selectedOffset = originOffsetLeft - this.imagesOffset
       }
     },
+    // 空函数
     noop () {},
-    initDistance () {
+    // 初始化一些变量
+    init () {
       const initInstances = () => {
         if (distances.length > 0) return
 
@@ -117,6 +141,7 @@ export default {
           distances[index].width = image.width
           image.width = distances[index].width
         }
+        maxRightDistance = distances[(this.images.length)].offset - selectedTotalWidth
       }
       completedCount++
       if (completedCount === this.images.length) {
@@ -125,6 +150,7 @@ export default {
         this.selectedWidth = distances[0].width
       }
     },
+    // 打开Dialog
     openDialog () {
       this.visible = true
     },
@@ -135,7 +161,6 @@ export default {
       } else if (type === 'leave') {
         this.isImageClicking = false
       } else {
-        console.log(this.isImageClicking, this.moveDistance)
         if (this.isImageClicking && !this.moveDistance) {
           this.activeIndex = i
           this.isImageClicking = false
@@ -152,24 +177,24 @@ export default {
       if (this.activeIndex === 0) return
       this.activeIndex--
     },
+    // 用户点击确定按钮emit一个confirm事件
     toConfirm () {
       this.$emit('confirm', {
         url: this.images[this.activeIndex]
       })
     },
-    // 以下为实现可拖拽选择框的四个事件处理函数
+    // 以下为实现可拖拽选择框的三个事件处理函数
     begin (e) {
       this.initialDistance = e.screenX
     },
     move (e) {
       if (this.initialDistance) {
         this.transition = false
-        const maxRight = distances[(this.images.length)].offset - selectedTotalWidth
         const moveDistance = e.screenX - this.initialDistance
 
         // 判断选择框是否溢出
-        if (moveDistance < 0 && this.imagesOffset - moveDistance > maxRight) {
-          this.moveDistance = this.imagesOffset - maxRight
+        if (moveDistance < 0 && this.imagesOffset - moveDistance > maxRightDistance) {
+          this.moveDistance = this.imagesOffset - maxRightDistance
         } else if (moveDistance > 0 && this.imagesOffset - moveDistance < 0) {
           this.moveDistance = this.imagesOffset
         } else {
@@ -178,34 +203,35 @@ export default {
       }
     },
     stop (e) {
-      if (this.initialDistance) {
-        this.transition = true
-        this.initialDistance = 0
+      if (!this.initialDistance) return
 
-        this.imagesOffset -= this.moveDistance
-        this.moveDistance = 0
-        let rightIndex
-        for (let [index, item] of distances.entries()) {
-          if (item.offset > this.imagesOffset + this.selectedOffset) {
-            rightIndex = index
-            break
-          }
-        }
-        const rightOffset = distances[rightIndex].offset - this.imagesOffset
-        const leftOffset = distances[rightIndex - 1].offset - this.imagesOffset
-        if (rightOffset - this.selectedOffset > this.selectedOffset - leftOffset) {
-          if (this.activeIndex === rightIndex - 1) {
-            this.computeSelected(this.activeIndex)
-          } else {
-            this.activeIndex = rightIndex - 1
-          }
-        } else {
-          if (this.activeIndex === rightIndex) {
-            this.computeSelected(this.activeIndex)
-          }
-          this.activeIndex = rightIndex
+      this.transition = true
+      this.initialDistance = 0
+      this.imagesOffset -= this.moveDistance
+
+      // 以选择框的左边缘为参考点
+      // 离它最近的左边元素的offset为leftOffset；rightOffset、rightIndex同理
+      let rightIndex
+      for (let [index, item] of distances.entries()) {
+        if (item.offset > this.imagesOffset + this.selectedOffset) {
+          rightIndex = index
+          break
         }
       }
+      const rightOffset = distances[rightIndex].offset - this.imagesOffset
+      const leftOffset = distances[rightIndex - 1].offset - this.imagesOffset
+      if (rightOffset - this.selectedOffset > this.selectedOffset - leftOffset) {
+        const nextIndex = rightIndex - 1
+        this.activeIndex === nextIndex
+          ? this.computeSelected(nextIndex)
+          : this.activeIndex = nextIndex
+      } else {
+        const nextIndex = rightIndex
+        this.activeIndex === nextIndex
+          ? this.computeSelected(nextIndex)
+          : this.activeIndex = nextIndex
+      }
+      this.moveDistance = 0
     }
   }
 }
@@ -221,7 +247,7 @@ export default {
   .cover-selector__wrapper
     text-align: center
     .cover-selector__cover
-      height: 100px
+      height: 250px
     .cover-selector__selector
       display: flex
       justify-content: space-between
