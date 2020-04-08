@@ -29,7 +29,9 @@
                 @dragstart.prevent="noop"
                 @selectstart.prevent="noop"
                 @load="initDistance"
-                @click="selectImg(i)"
+                @mousedown="selectImg(i, 'down')"
+                @mouseup="selectImg(i, 'up')"
+                @mouseleave="selectImg(i, 'leave')"
                 v-for="(img, i) in images"
                 :src="img"
               )
@@ -127,8 +129,18 @@ export default {
       this.visible = true
     },
     // 直接点击图片进行选择
-    selectImg (i) {
-      // this.activeIndex = i
+    selectImg (i, type) {
+      if (type === 'down') {
+        this.isImageClicking = true
+      } else if (type === 'leave') {
+        this.isImageClicking = false
+      } else {
+        console.log(this.isImageClicking, this.moveDistance)
+        if (this.isImageClicking && !this.moveDistance) {
+          this.activeIndex = i
+          this.isImageClicking = false
+        }
+      }
     },
     // 通过箭头选择下一张照片
     toNext () {
@@ -147,11 +159,11 @@ export default {
     },
     // 以下为实现可拖拽选择框的四个事件处理函数
     begin (e) {
-      this.transition = false
       this.initialDistance = e.screenX
     },
     move (e) {
       if (this.initialDistance) {
+        this.transition = false
         const maxRight = distances[(this.images.length)].offset - selectedTotalWidth
         const moveDistance = e.screenX - this.initialDistance
 
@@ -209,7 +221,7 @@ export default {
   .cover-selector__wrapper
     text-align: center
     .cover-selector__cover
-      height: 250px
+      height: 100px
     .cover-selector__selector
       display: flex
       justify-content: space-between
