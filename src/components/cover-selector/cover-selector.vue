@@ -209,7 +209,7 @@ export default {
   .cover-selector__wrapper
     text-align: center
     .cover-selector__cover
-      height: 100px
+      height: 250px
     .cover-selector__selector
       display: flex
       justify-content: space-between
