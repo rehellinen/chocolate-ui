@@ -52,13 +52,20 @@ export default {
     ChocDialog
   },
   props: {
+    // 具体的图片数据
     images: {
       type: Array,
       default: () => []
     },
+    // 默认选中的图片索引
     defaultActiveIndex: {
       type: Number,
       default: 0
+    },
+    // 达到最后一张，点击下一张则返回第一张
+    isCircular: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -169,7 +176,10 @@ export default {
     },
     // 通过箭头选择下一张照片
     toNext () {
-      if (this.activeIndex === this.images.length - 1) return
+      if (this.activeIndex === this.images.length - 1) {
+        if (this.isCircular) this.activeIndex = 0
+        return
+      }
       this.activeIndex++
     },
     // 通过箭头选择上一张照片
