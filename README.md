@@ -13,7 +13,13 @@ event：
 
 
 ### 无限加载组件
-待开发
+通过自定义指令`v-infinite-scroll="load"`使用
+
+属性选项：
+1. infinite-scroll-disabled(Boolean:false) - 是否禁用
+2. infinite-scroll-delay(Number:200) - 时延，单位为ms
+3. infinite-scroll-distance(Number:0) - 触发加载的距离，单位为px
+4. infinite-scroll-immediate(Boolean:true) - 是否立即执行加载方法，以防初始状态下内容无法撑满容器。
 
 
 ### Dialog组件  
