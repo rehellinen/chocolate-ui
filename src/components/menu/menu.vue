@@ -12,8 +12,8 @@ export default {
         name: '封面选择',
         path: '/cover_selection'
       }, {
-        name: '无限加载',
-        path: '/load_more'
+        name: '无限滚动',
+        path: '/infinite_scroll'
       }]
     }
   }

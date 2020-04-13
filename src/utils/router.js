@@ -2,13 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import CoverSelector from '../pages/cover-selector/cover-selector'
-import LoadMore from '../components/load-more/load-more'
+import InfiniteScroll from '../pages/infinite-scroll/infinite-scroll'
 
 Vue.use(Router)
 
 const routes = [
   { path: '/cover_selection', component: CoverSelector },
-  { path: '/load_more', component: LoadMore }
+  { path: '/infinite_scroll', component: InfiniteScroll }
 ]
 
 export const router = new Router({
