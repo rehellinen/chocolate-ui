@@ -9,6 +9,9 @@ import App from './App'
 import { router } from './utils/router'
 
 import 'sass/reset.sass'
+import InfiniteScroll from './components/infinite-scroll/index'
+
+Vue.directive(InfiniteScroll.name, InfiniteScroll)
 
 /* eslint-disable no-new */
 new Vue({
