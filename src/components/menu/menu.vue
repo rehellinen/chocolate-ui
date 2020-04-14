@@ -14,6 +14,9 @@ export default {
       }, {
         name: '无限滚动',
         path: '/infinite_scroll'
+      }, {
+        name: '图表',
+        path: '/echarts'
       }]
     }
   }
