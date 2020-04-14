@@ -105,72 +105,76 @@ export const histogramOption = {
 }
 
 export const geographyOption = {
-  title: {
-    text: '在线设备分布',
-    left: '40%',
-    top: '0px',
-    textStyle: {
-      color: '#fff',
-      opacity: 0.7
-    }
-  },
-  dataRange: {
-    show: false,
-    min: 0,
-    max: 1000000,
-    text: ['High', 'Low'],
-    realtime: true,
-    calculable: true,
-    color: ['orangered', 'yellow', 'lightskyblue']
-  },
   tooltip: {
-    trigger: 'item'
-  },
-  geo: {
-    map: 'uk',
-    label: {
-      emphasis: {
-        show: false
-      }
-    },
-    roam: false,
-    silent: true,
-    itemStyle: {
-      normal: {
-        areaColor: '#37376e',
-        borderColor: '#000'
-      },
-      emphasis: {
-        areaColor: '#2a333d'
-      }
+    show: true,
+    formatter: function (params) {
+      return params.data
+        ? `${params.data.chineseName}<br/>确诊：${params.data.value}`
+        : ''
     }
   },
-  series: [{
-    type: 'map',
-    mapType: 'uk',
-    mapLocation: {
-      y: 100
-    },
-    data: [
-      { name: '苏格兰', value: 6067 },
-      { name: '北爱尔兰', value: 1882 },
-      { name: '英格兰', value: 69329 },
-      { name: '威尔士', value: 5610 }
-    ],
-    symbolSize: 12,
-    label: {
-      normal: {
+  series: [
+    {
+      name: 'mapSer',
+      type: 'map',
+      roam: false,
+      mapType: 'UK',
+      top: 'top',
+      left: 'center',
+      right: '',
+      label: {
+        fontSize: 10,
         show: false
       },
-      emphasis: {
-        show: false
-      }
-    },
-    itemStyle: {
-      emphasis: {
-        borderColor: '#fff',
-        borderWidth: 1
+      data: [
+        {
+          name: 'England',
+          chineseName: '英格兰',
+          selected: false,
+          value: 69329,
+          itemStyle: {
+            areaColor: '#fe614f',
+            emphasis: {}
+          }
+        },
+        {
+          name: 'Scotland',
+          chineseName: '苏格兰',
+          selected: false,
+          value: 6067,
+          itemStyle: {
+            areaColor: '#ff7759',
+            emphasis: {}
+          }
+        },
+        {
+          name: 'Wales',
+          chineseName: '威尔士',
+          selected: false,
+          value: 5610,
+          itemStyle: {
+            areaColor: '#ff7759',
+            emphasis: {}
+          }
+        },
+        {
+          name: 'Northern Ireland',
+          chineseName: '北爱尔兰',
+          selected: false,
+          value: 1882,
+          itemStyle: {
+            areaColor: '#ff7759',
+            emphasis: {}
+          }
+        }
+      ],
+      itemStyle: {
+        normal: {
+          areaColor: '#c7ccd5',
+          borderColor: '#b5ddf1'
+        },
+        emphasis: {}
       }
     }
-  }]
+  ]
 }

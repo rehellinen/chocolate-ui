@@ -33,7 +33,7 @@ export const UKMapData = {
         'hc-key': 'gb-eng',
         'hc-a2': 'EN',
         country: 'United Kingdom',
-        name: '英格兰'
+        name: 'England'
       },
       geometry: {
         type: 'MultiPolygon',
@@ -505,7 +505,7 @@ export const UKMapData = {
         'hc-key': 'gb-wls',
         'hc-a2': 'WA',
         country: 'United Kingdom',
-        name: '威尔士'
+        name: 'Wales'
       },
       geometry: {
         type: 'MultiPolygon',
@@ -736,7 +736,7 @@ export const UKMapData = {
         'hc-key': 'gb-sct',
         'hc-a2': 'SC',
         country: 'United Kingdom',
-        name: '苏格兰'
+        name: 'Scotland'
       },
       geometry: {
         type: 'MultiPolygon',
@@ -2079,7 +2079,7 @@ export const UKMapData = {
         'hc-key': 'gb-nir',
         'hc-a2': 'NI',
         country: 'United Kingdom',
-        name: '北爱尔兰'
+        name: 'Northern Ireland'
       },
       geometry: {
         type: 'MultiPolygon',

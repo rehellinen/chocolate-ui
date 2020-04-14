@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     draw () {
-      this.$echarts.registerMap('uk', UKMapData)
+      this.$echarts.registerMap('UK', UKMapData)
 
       const histogram = this.$echarts.init(document.getElementById('histogram'))
       const geography = this.$echarts.init(document.getElementById('geography'))
