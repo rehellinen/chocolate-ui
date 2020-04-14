@@ -107,7 +107,6 @@ export default {
           }
         } else {
           if (newIndex < oldIndex) {
-            console.log('11')
             if (originOffsetLeft + originWidth > selectedTotalWidth) {
               this.selectedOffset = selectedTotalWidth - originWidth
               this.imagesOffset = originOffsetLeft + originWidth - selectedTotalWidth
@@ -115,7 +114,6 @@ export default {
               this.selectedOffset = originOffsetLeft - this.imagesOffset
             }
           } else {
-            console.log('12')
             this.selectedOffset = selectedTotalWidth - this.selectedWidth
             this.imagesOffset = originOffsetLeft - this.selectedOffset
           }
