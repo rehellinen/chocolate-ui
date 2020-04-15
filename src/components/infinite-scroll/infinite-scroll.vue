@@ -21,10 +21,6 @@ export default {
     canScroll: {
       type: Boolean,
       default: true
-    },
-    dispatchData: {
-      type: Function,
-      default: () => {}
     }
   },
   data () {
@@ -82,10 +78,6 @@ export default {
 
       this.lineTopHeight = _from * this.height
       this.lineBottomHeight = (this.list.length - _to) * this.height
-
-      if (typeof this.dispatchData === 'function') {
-        this.dispatchData(this)
-      }
 
       this.resetPreviewList(_from, _to)
 
