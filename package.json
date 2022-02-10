@@ -67,7 +67,7 @@
     "axios": "^0.18.0",
     "core-js": "^2.6.8",
     "echarts": "^4.7.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "throttle-debounce": "^2.1.0",
     "vue": "^2.5.17",
     "vue-router": "^3.0.2",
